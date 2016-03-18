@@ -11,8 +11,9 @@ function CanvasHolder(){
             window.onresize = function()  { resizeCanvas(); }
             canvas = new fabric.StaticCanvas('canvas');
             resizeCanvas();         //resize the canvas-Element
+            window.c = canvas;
 
-            test(canvas);
+            new TetrisBoard(canvas, {x: 10, y: 20});
         }
 
         function resizeCanvas() {
@@ -45,57 +46,90 @@ function CanvasHolder(){
 }
 
 
+function TetrisBoard(_canvas, boardSize) {
+    "use strict";
+    var self = this;
+    var canvas = _canvas
+    var board;
 
-
-
-function test(canvas) {
-    
-
-    fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
-    fabric.Object.prototype.transparentCorners = false;
-
-    for(var i=0; i<100;++i) {
-        getRandomInt = fabric.util.getRandomInt,
-            rainbow    = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"],
-            rainbowEnd = rainbow.length - 1;
-
-            dot = new fabric.Circle({
-              left:   getRandomInt(0, 1000),
-              top:    getRandomInt(0, 2000),
-              radius: 10,
-              fill:   rainbow[getRandomInt(0, rainbowEnd)]
-            });
-            canvas.add(dot);
-
-
-            canvas.add(
-               new fabric.Rect({ top: 100, left: 100, width: 50, height: 50, fill: '#f55' }),
-               new fabric.Circle({ top: 140, left: 230, radius: 75, fill: 'green' }),
-               new fabric.Triangle({ top: 300, left: 210, width: 100, height: 100, fill: 'blue' })
-             );
-
-            //canvas.renderAll();
+    function construct() {
+        initEmptyBoard();
     }
+
+    function initEmptyBoard() {
+        var rainbow    = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
+        var getRandomInt = fabric.util.getRandomInt;
+        var rainbowEnd = rainbow.length - 1;
+
+
+        var fieldSize = {
+            x: canvas.width / boardSize.x,
+            y: canvas.height / boardSize.y,
+        }
+        board = [];
+        for(var y = 0; y<boardSize.y; ++y) {
+            board[y] = [];
+            for(var x = 0; x<boardSize.x; ++x) {
+                board[y][x] = new fabric.Rect(
+                  { left:   x * fieldSize.x,
+                    top:    y * fieldSize.y,
+                    width:  fieldSize.x,
+                    height: fieldSize.y,
+                    fill:   rainbow[getRandomInt(0, rainbowEnd)]
+                })
+                canvas.add(board[y][x]);
+            }
+        }
+    }
+
+    construct();
 }
 
 
+// function test(canvas) {
+    
+
+//     fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
+//     fabric.Object.prototype.transparentCorners = false;
+
+//     for(var i=0; i<100;++i) {
+//         getRandomInt = fabric.util.getRandomInt,
+//             rainbow    = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"],
+//             rainbowEnd = rainbow.length - 1;
+
+//             dot = new fabric.Circle({
+//               left:   getRandomInt(0, 1000),
+//               top:    getRandomInt(0, 2000),
+//               radius: 10,
+//               fill:   rainbow[getRandomInt(0, rainbowEnd)]
+//             });
+//             canvas.add(dot);
 
 
+//             canvas.add(
+//                new fabric.Rect({ top: 100, left: 100, width: 50, height: 50, fill: '#f55' }),
+//                new fabric.Circle({ top: 140, left: 230, radius: 75, fill: 'green' }),
+//                new fabric.Triangle({ top: 300, left: 210, width: 100, height: 100, fill: 'blue' })
+//              );
 
-
-
-
-// function GameRunner(_context){
-//         "use strict";
-//         var self = this;
-//         var context = _context;
-        
-
-//         function construct() {
-//         }
-
-
-//         construct();
+//             //canvas.renderAll();
+//     }
 // }
 
 
+
+
+
+
+
+
+function Template(_canvas) {
+    "use strict";
+    var self = this;
+    var canvas = _canvas
+
+    function construct() {
+    }
+
+    construct();
+}

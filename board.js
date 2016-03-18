@@ -1,18 +1,25 @@
 
-function CanvasHolder(){
+function CanvasHolder(canvasId, size, autoResize){
     "use strict";
     var self = this;
-    var sizeX = 1000;
-    var sizeY = 2000;
+    var logicalSize = size;
+    var coordSize = {
+        x: size.x * 100,
+        y: size.y * 100,        
+    }
 
     var canvas;
     var board;
 
     function construct() {
-        window.onresize = function()  { resizeCanvas(); }
-        canvas = new fabric.StaticCanvas('canvas');
-        resizeCanvas();         //resize the canvas-Element
-        board = new TetrisBoard(canvas, {x: 10, y: 20});
+        if(autoResize) {
+            window.onresize = function()  { resizeCanvas(); }
+        }
+        canvas = new fabric.StaticCanvas(canvasId);
+        if(autoResize) {
+            resizeCanvas();         //resize the canvas-Element
+        }
+        board = new TetrisBoard(canvas, logicalSize);
         window.c = canvas;
     }
 
@@ -24,19 +31,19 @@ function CanvasHolder(){
             x = w.innerWidth || e.clientWidth || g.clientWidth,
             y = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
-        var cv = document.getElementsByTagName("canvas")[0];
+        var cv = document.getElementById(canvasId);
         //var cc = document.getElementsByClassName("canvas-container")[0];      //In case of non-Static Canvas will be used
         var cc = document.getElementById("canvasWrapper");
 
         var cx,cy;                  //The size of the canvas-Element
         var cleft=0;                //Offset to the left border (to center the canvas-element, if there are borders on the left&right)
-        if(x/y > sizeX/sizeY){      //x-diff > y-diff   ==> black borders left&right
-            cx = (y*sizeX/sizeY);
+        if(x/y > coordSize.x/coordSize.y){      //x-diff > y-diff   ==> black borders left&right
+            cx = (y*coordSize.x/coordSize.y);
             cy = y;
             cleft = (x-cx)/2;
         }else{                      //y-diff > x-diff   ==> black borders top&bottom
             cx = x;
-            cy = (x*sizeY/sizeX);
+            cy = (x*coordSize.y/coordSize.x);
         }
         cc.setAttribute("style", "width:"+x+"px;height:"+y+"px;");                                          //canvas-content = fullscreen
         cv.setAttribute("style", "width:"+cx+"px;height:"+cy+"px;position: relative; left:"+cleft+"px");    //canvas: 16:9, as big as possible, horizintally centered
@@ -91,14 +98,16 @@ function TetrisBoard(_canvas, boardSize) {
     }
 
     function getColor(field) {
-        switch(field) {
-            case " ":   return "#000";
-            case 1:   return "#f00"; 
-            case 2:   return "#0f0"; 
-            case 3:   return "#00f"; 
-            case 4:   return "#ff0"; 
-            case 5:   return "#f0f"; 
-            case 6:   return "#fff";
+        if(field == " ") {
+            return "#000";
+        }
+        switch(field % 6) {
+            case 0:   return "#f00"; 
+            case 1:   return "#0f0"; 
+            case 2:   return "#00f"; 
+            case 3:   return "#ff0"; 
+            case 4:   return "#f0f"; 
+            case 5:   return "#f70";
             default:
             console.log("Error: unknown field ", field);
             return "#fff";

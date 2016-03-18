@@ -13,6 +13,14 @@ body{
     display: inline-block;
 }
 
-canvas{
+#canvas{
 	background-color: black;
+	z-index: 1;
+}
+
+#previewCanvas{
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: darkgray;
 }

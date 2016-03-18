@@ -1,5 +1,5 @@
 
-function GameContext(_board) {
+function TetrisContext(_board) {
     "use strict";
     var self = this;
     var board = _board
@@ -37,7 +37,31 @@ function GameContext(_board) {
     ];
 
     function construct() {
+        addRotatedBlocks();
+        addRotatedBlocks();
+        console.log("Number of available stones: ", stones.length);
     }
+
+    function addRotatedBlocks() {
+        var stoneCount = stones.length;
+        for(var i=0; i<stoneCount; ++i) {
+            var newStone = "";
+                for(var x = 0; x<4; ++x) {
+            for(var y = 0; y<4; ++y) {
+                    if(isStoneSolid(i, x, y)){
+                        newStone = newStone + 'X';
+                    } else {
+                         newStone = newStone + ' ';
+                    }
+                }
+            }
+            stones.push(newStone);
+        }
+    }
+
+
+
+
 
     self.randomStone = function() {
         return Math.floor(Math.random() * stones.length);
@@ -92,7 +116,8 @@ function GameContext(_board) {
     }
 
     self.canMoveStone = function(position, stoneIdx, vector) {
-        return canPlaceStone(add(position, vector), stoneIdx);
+        alert("Not implemented yet");
+       //return canPlaceStone(add(position, vector), stoneIdx);
     }
 
     construct();

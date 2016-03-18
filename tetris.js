@@ -1,22 +1,41 @@
 
 function init(){    
-    var canvasHolder = new CanvasHolder();
+    var canvasHolder = new CanvasHolder('canvas', {x: 10, y: 20}, true);
+    var previewHolder = new CanvasHolder('previewCanvas', {x: 4, y: 4}, false);
+
     var board = canvasHolder.getBoard();
-    var gameContext = new GameContext(board);
-    var tetris = new Tetris(board, gameContext);
+    var preview = previewHolder.getBoard();
+
+    var gameContext = new TetrisContext(board);
+    var previewContext = new TetrisContext(preview)
+
+    var tetris = new Tetris(board, preview, gameContext, previewContext);
 }
 
 
-function Tetris(_board, _gameContext) {
+function Tetris(_board, _preview, _gameContext, _previewContext) {
     "use strict";
     var self = this;
-    var board = _board
-    var gameContext = _gameContext
+    var board = _board;
+    var preview = _preview;
+    var gameContext = _gameContext;
+    var previewContext = _previewContext;
+
+    var nextStone;
+    var currentStone;
 
     function construct() {
-        gameContext.placeStone({x: 2, y: 3}, gameContext.randomStone());
+        nextStone = gameContext.randomStone();
+        currentStone = gameContext.randomStone();
+
+        previewContext.placeStone({x: 0, y: 0}, nextStone);
+        gameContext.placeStone({x: 3, y: 0}, currentStone);
+
+        preview.update();
         board.update();
     }
+
+
 
     construct();
 }

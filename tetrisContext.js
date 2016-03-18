@@ -108,19 +108,31 @@ function TetrisContext(_board) {
         }        
     }
 
-    function removeStone(position, stoneIdx) {
-        placeStone(position, stoneIdx, ' ');
+    self.removeStone = function(position, stoneIdx) {
+        for(var y = 0; y<4; ++y) {
+            for(var x = 0; x<4; ++x) {
+                if(isStoneSolid(stoneIdx, x, y)) {
+                    var boardPos = {
+                        'x': x+position.x,
+                        'y': y+position.y
+                    };
+                    board.setField(boardPos, ' ');
+                }
+            }
+        }
     }
 
     self.moveStone = function(position, stoneIdx, vector) {
-        removeStone(position, stoneIdx);
-        placeStone(add(position, vector), stoneIdx)
+        self.removeStone(position, stoneIdx);
+        var newPos = add(position, vector);
+        self.placeStone(newPos, stoneIdx)
+        return newPos;
     }
 
     self.rotateStone = function(position, stoneIdx, rotateRight) {
         var newStoneIndex = rotatedStoneIndex(stoneIdx);
-        removeStone(position, stoneIdx);
-        placeStone(add(position, vector), newStoneIndex)
+        self.removeStone(position, stoneIdx);
+        self.placeStone(position, newStoneIndex)
         return newStoneIndex;
     }
 
@@ -155,7 +167,7 @@ function TetrisContext(_board) {
 
     self.canMoveStone = function(position, stoneIdx, vector) {
         self.removeStone(position, stoneIdx);
-        var possible = canPlaceStone(add(position, vector), stoneIdx);
+        var possible = self.canPlaceStone(add(position, vector), stoneIdx);
         self.placeStone(position, stoneIdx);
         return possible;
     }
@@ -163,7 +175,7 @@ function TetrisContext(_board) {
     self.canRotateStone = function(position, stoneIdx, rotateRight) {
         self.removeStone(position, stoneIdx);
         var nextStone = rotatedStoneIndex(stoneIdx);
-        var possible = canPlaceStone(position, nextStone);        
+        var possible = self.canPlaceStone(position, nextStone);        
         self.placeStone(position, stoneIdx);
         return possible;        
     }

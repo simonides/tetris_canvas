@@ -101,15 +101,16 @@ function TetrisBoard(_canvas, boardSize) {
         if(field == " ") {
             return "#000";
         }
-        switch(field % 6) {
+        switch(field % 7) {
             case 0:   return "#f00"; 
             case 1:   return "#0f0"; 
             case 2:   return "#00f"; 
             case 3:   return "#ff0"; 
             case 4:   return "#f0f"; 
             case 5:   return "#f70";
+            case 6:   return "#0f7";
             default:
-            console.log("Error: unknown field ", field);
+            console.log("Error: unknown field ", field%7);
             return "#fff";
         }
     }

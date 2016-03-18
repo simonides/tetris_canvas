@@ -5,11 +5,13 @@
 	<title>Tetris</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="master.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="game.css" />
+	<script type="text/javascript" src="fabricjs.js"></script>
 	<script type="text/javascript" src="jquery-2.2.1.js"></script>
 	<script type="text/javascript" src="game.js"></script>
 </head>
-<body>
-	<div id="wrapper">
-	</div>
+<body onload='init()'>
+	<div id="canvasWrapper">
+    <canvas id="canvas" width="100px" height="100px"></canvas>
+</div>
 </body>
 </html>

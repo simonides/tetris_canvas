@@ -1,0 +1,4 @@
+*.exe
+*.private
+*.secret
+*.illegalContent

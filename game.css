@@ -1,0 +1,66 @@
+#viewport{
+	overflow: hidden;
+	height: 623px;
+	cursor: pointer;
+}
+
+#viewport div{
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.animatedfloor{
+	-webkit-animation: floorslide 200ms infinite linear; /* Chrome, Safari, Opera  */
+    animation: floorslide 200ms infinite linear;
+}
+
+@keyframes floorslide {
+   0% { background: url(sprites.png) -600px 0px; }
+   100% { background: url(sprites.png) -624px 0px; }
+}
+
+#flash_div{
+	pointer-events: none;
+	z-index: 90;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 900px;
+	background-color: transparent;
+
+}
+.flash{
+	-webkit-animation: flash 200ms  linear; /* Chrome, Safari, Opera  */
+    animation: flash 200ms linear;
+
+/*    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;*/
+
+}
+
+
+@keyframes flash {
+   0% { background-color: white; }
+   100% { background-color: transparent; }
+}
+
+
+.sprite.background1, .sprite.background2{
+    z-index: -1;
+}
+
+.sprite.bird{
+    z-index: 12;
+}
+
+.sprite.floor{
+    z-index: 10;
+}
+
+.ui{
+	z-index: 15;
+}
+

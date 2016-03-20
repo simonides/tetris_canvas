@@ -1,0 +1,26 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+body{
+    overflow: hidden;
+}
+
+#canvasWrapper {
+    background-color: gray;
+    display: inline-block;
+}
+
+#canvas{
+	background-color: black;
+	z-index: 1;
+}
+
+#previewCanvas{
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: darkgray;
+}

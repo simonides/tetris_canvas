@@ -30,9 +30,11 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         nextStoneType = gameContext.randomStone();
        
         $(document).keydown(function(e) {
+
+
             switch(e.which) {
                 case 37: left();  break;
-                // case 38: up();    break;
+                //case 38: up();    break;
                 case 39: right(); break;
                 case 40: down();  break;
                 case 67: rotateLeft(); break;   // c
@@ -41,6 +43,8 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
                 default: return;
             }
             e.preventDefault();
+            board.printBoard();
+
         });
 
         previewContext.placeStone({x: 0, y: 0}, nextStoneType);

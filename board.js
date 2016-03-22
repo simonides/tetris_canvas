@@ -142,6 +142,26 @@ function TetrisBoard(_canvas, boardSize) {
         canvas.renderAll();     //Note: internally, the library manages all changes. If there aren't many, it only makes partial redraws.
     }
 
+    self.printBoard = function () {
+        console.log("Board:");
+        for(var y = 0; y < boardSize.y; ++y) {
+
+
+            var line = y + ( y < 10 ? '  #' : ' #');
+
+
+            for (var x = 0; x < boardSize.x; ++x) {
+                if(board[y][x].field == ' '){
+                    line += ' ';
+                }else{
+                    line += 'X';
+                }
+            }
+            line += '#';
+            console.log(line);
+        }
+    }
+
     construct();
 }
 

@@ -5,44 +5,153 @@ function TetrisContext(_board) {
     var board = _board
 
     var stones = [
+        // 0 Degrees
+        " X  "+
+        " X  "+
+        " X  "+
+        " X  ",
+        
         "    "+
         " XX "+
         " XX "+
         "    ",
-        
-        " X  "+
-        " X  "+
-        "XX  "+
-        "    ",
                 
-        "  X "+
-        "  X "+
-        "  XX"+
+        "XX  "+
+        " X  "+
+        " X  "+
         "    ",
         
-        "  X "+
         " XX "+
+        " X  "+
         " X  "+
         "    ",
         
         " X  "+
-        " XX "+
-        "  X "+
+        "XXX "+
+        "    "+
         "    ",
         
         " X  "+
         "XX  "+
-        " X  "+
+        "X   "+
         "    ",
         
+        "X   "+
+        "XX  "+
+        " X  "+
+        "    ",
+
+        // 90 Degrees
+        "    "+
+        "XXXX"+
+        "    "+
+        "    ",
+
+        "    "+
+        " XX "+
+        " XX "+
+        "    ",
+
+        "  X "+
+        "XXX "+
+        "    "+
+        "    ",
+
+        "    "+
+        "XXX "+
+        "  X "+
+        "    ",
+
+        " X  "+
+        " XX "+
+        " X  "+
+        "    ",
+
+        "XX  "+
+        " XX "+
+        "    "+
+        "    ",
+
+        " XX "+
+        "XX  "+
+        "    "+
+        "    ",
+
+        // 180 Degrees
+        "  X "+
+        "  X "+
+        "  X "+
+        "  X ",
+
+        "    "+
+        " XX "+
+        " XX "+
+        "    ",
+
         " X  "+
         " X  "+
+        " XX "+
+        "    ",
+
         " X  "+
-        " X  "
+        " X  "+
+        "XX  "+
+        "    ",
+
+        "    "+
+        "XXX "+
+        " X  "+
+        "    ",
+
+        "  X "+
+        " XX "+
+        " X  "+
+        "    ",
+
+        " X  "+
+        " XX "+
+        "  X "+
+        "    ",
+
+        // 270 Degrees
+        "    "+
+        "    "+
+        "XXXX"+
+        "    ",
+
+        "    "+
+        " XX "+
+        " XX "+
+        "    ",
+
+        "    "+
+        "XXX "+
+        "X   "+
+        "    ",
+
+        "X   "+
+        "XXX "+
+        "    "+
+        "    ",
+
+        " X  "+
+        "XX  "+
+        " X  "+
+        "    ",
+
+        "    "+
+        "XX  "+
+        " XX "+
+        "    ",
+
+        "    "+
+        " XX "+
+        "XX  "+
+        "    "
     ];
 
     function construct() {
-        addRotatedBlocks();
+        //addRotatedBlocks();
     }
 
     function addRotatedBlocks() {
@@ -51,11 +160,11 @@ function TetrisContext(_board) {
         for(var o = 0; o<3; ++o) {
             for(var i=0; i<stoneCount; ++i) {
                 var newStone = rotatedStoneString(stones[i + stoneOffset]);
-                if(i%7 != 0 && i%7 != 6) {                    
+                /*if(i%7 != 0 && i%7 != 6) {
                     while(newStone.lastIndexOf("    ", 0) === 0) {
                         newStone = newStone.substring(4, 16) + "    ";
                     }   
-                }
+                }*/
                 stones.push(newStone);
             }
             stoneOffset += stoneCount;
@@ -87,7 +196,8 @@ function TetrisContext(_board) {
     }
 
     self.randomStone = function() {
-        return Math.floor(Math.random() * stones.length);
+       //return Math.floor(Math.random() * stones.length);
+        return 1;
     }
 
     function isStoneSolid(stoneIdx, x, y) {

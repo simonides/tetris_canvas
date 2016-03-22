@@ -142,6 +142,33 @@ function TetrisBoard(_canvas, boardSize) {
         canvas.renderAll();     //Note: internally, the library manages all changes. If there aren't many, it only makes partial redraws.
     }
 
+    self.checkBoardForRowsToDelete = function () {
+        for (var row = 0; row < boardSize.y; ++row ){
+            if(self.checkRow(row)){
+                console.log("remove line: " + row);
+                self.deleteRow(row);
+            }
+        }
+    }
+
+    // check if a row should be deleted
+    self.checkRow = function (row) {
+        var clearLine = true;
+        for (var x = 0; x < boardSize.x; ++x) {
+            if (board[row][x].field == ' ') {
+                clearLine = false;
+                break;
+            }
+        }
+        return clearLine;
+    }
+
+    self.deleteRow = function (row) {
+        //TODO
+
+    }
+
+
     self.printBoard = function () {
         console.log("Board:");
         for(var y = 0; y < boardSize.y; ++y) {
@@ -161,6 +188,8 @@ function TetrisBoard(_canvas, boardSize) {
             console.log(line);
         }
     }
+
+
 
     construct();
 }

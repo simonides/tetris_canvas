@@ -151,53 +151,12 @@ function TetrisContext(_board) {
     ];
 
     function construct() {
-        //addRotatedBlocks();
     }
 
-    function addRotatedBlocks() {
-        var stoneCount = stones.length;
-        var stoneOffset = 0;
-        for(var o = 0; o<3; ++o) {
-            for(var i=0; i<stoneCount; ++i) {
-                var newStone = rotatedStoneString(stones[i + stoneOffset]);
-                /*if(i%7 != 0 && i%7 != 6) {
-                    while(newStone.lastIndexOf("    ", 0) === 0) {
-                        newStone = newStone.substring(4, 16) + "    ";
-                    }   
-                }*/
-                stones.push(newStone);
-            }
-            stoneOffset += stoneCount;
-        }
-    }
-
-    function rotatedStoneString(stoneString) {
-        var newStone = "";
-        for(var x = 0; x<4; ++x) {
-            for(var y = 3; y>=0; --y) {
-                newStone = newStone + stoneString[y*4+x];
-            }
-        }  
-
-        var empty = 0;
-        for(var y = 0; y<4; ++y) {
-            if(newStone[y*4 + 1] == ' ') {
-                ++empty;
-            }
-        }
-        if(empty == 4) {
-            var nStone = "";
-            for(var y = 0; y<4; ++y) {
-                nStone += " " + newStone[y*4 + 2] + newStone[y*4 + 3] + " ";
-            }
-            newStone = nStone;
-        }
-        return newStone;
-    }
 
     self.randomStone = function() {
-       //return Math.floor(Math.random() * stones.length);
-        return 1;
+       return Math.floor(Math.random() * stones.length);
+       // return 4;
     }
 
     function isStoneSolid(stoneIdx, x, y) {
@@ -240,7 +199,7 @@ function TetrisContext(_board) {
     }
 
     self.rotateStone = function(position, stoneIdx, rotateRight) {
-        var newStoneIndex = rotatedStoneIndex(stoneIdx);
+        var newStoneIndex = rotatedStoneIndex(stoneIdx,rotateRight);
         self.removeStone(position, stoneIdx);
         self.placeStone(position, newStoneIndex)
         return newStoneIndex;
@@ -248,9 +207,9 @@ function TetrisContext(_board) {
 
     function rotatedStoneIndex(stoneIdx, rotateRight) {
         var rotatedStoneIdx = stoneIdx + (rotateRight ? 7 : -7);
-        rotatedStoneIdx %= 7;
+        rotatedStoneIdx %= 28;
         if(rotatedStoneIdx < 0) {
-            rotatedStoneIdx += 7;
+            rotatedStoneIdx += 28;
         }
         return rotatedStoneIdx;
     }
@@ -284,7 +243,7 @@ function TetrisContext(_board) {
 
     self.canRotateStone = function(position, stoneIdx, rotateRight) {
         self.removeStone(position, stoneIdx);
-        var nextStone = rotatedStoneIndex(stoneIdx);
+        var nextStone = rotatedStoneIndex(stoneIdx,rotateRight);
         var possible = self.canPlaceStone(position, nextStone);        
         self.placeStone(position, stoneIdx);
         return possible;        

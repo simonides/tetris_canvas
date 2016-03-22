@@ -44,6 +44,7 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
             }
             e.preventDefault();
             board.printBoard();
+            board.checkBoardForRowsToDelete();
 
         });
 

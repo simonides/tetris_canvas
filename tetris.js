@@ -1,3 +1,6 @@
+var gameSpeed = 1000; // defines the time that is waited until the next tick happens
+var gameTimeout = null;
+var gameFinished = false;
 
 function init(){    
     var canvasHolder = new CanvasHolder('canvas', {x: 10, y: 20}, true);
@@ -26,17 +29,22 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
     var currentStone;
     var stonePos;
 
-    var lastTimestamp = 0;
+
 
     function construct() {
         nextStoneType = gameContext.randomStone();
        
         $(document).keydown(function(e) {
 
-
+            if(e.which == 'r'){
+                gameFinished = false;
+            }
+            if(gameFinished){
+                e.preventDefault();
+                return;
+            }
             switch(e.which) {
                 case 37: left();  break;
-
                 case 39: right(); break;
                 case 40: down();  break;
                 case 67: rotateLeft(); break;   // c
@@ -46,29 +54,40 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
                 default: return;
             }
             e.preventDefault();
-            board.printBoard();
-            board.checkBoardForRowsToDelete();
-
+            //board.printBoard();
+            //board.checkBoardForRowsToDelete();
         });
-
+        console.log("consruct*******************************");
         previewContext.placeStone({x: 0, y: 0}, nextStoneType);
         nextStone();
 
         preview.update();
         board.update();
+
+       // scheduler();
     }
 
 
-    function scheduler(timestamp) {
-        var elapsedTime = timestamp - lastTimestamp;
-        lastTimestamp = timestamp;
+    function scheduler() {
+        down();
 
-        requestAnimationFrame(scheduler);
-        if(elapsedTime > 100 || elapsedTime === 0 || isNaN(elapsedTime)) {
-            return;
-        }
-        gameLoop(elapsedTime);
+        setTimeoutForScheduler();
     }
+
+
+    function clearTimeout() {
+        clearTimeout(gameTimeout);
+    }
+
+
+    function setTimeoutForScheduler() {
+        gameTimeout = setTimeout(
+            function () {
+                scheduler();
+            }, gameSpeed);
+        console.log("set timeout id: " + gameTimeout);
+    }
+
 
     function nextStone() {
         previewContext.removeStone({x: 0, y: 0}, nextStoneType);
@@ -82,6 +101,8 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         stonePos = {x: 3, y: 0};
         if(!gameContext.canPlaceStone(stonePos, currentStone)) {
             console.log("Game Over");
+            clearTimeout();
+            gameFinished = true;
             return false;
         }
         gameContext.placeStone(stonePos, currentStone);
@@ -93,11 +114,19 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
     function down() {
         var dir = {x: 0, y: 1};
         if(!gameContext.canMoveStone(stonePos, currentStone, dir)) {
+
+            //clearTimeout();
+
             nextStone();
+            board.checkBoardForRowsToDelete();
+
             return;
         }
         stonePos = gameContext.moveStone(stonePos, currentStone, dir);
         board.update();
+
+        board.printBoard();
+        //setTimeoutForScheduler();
     }
 
     function rotateRight() {

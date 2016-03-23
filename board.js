@@ -139,7 +139,7 @@ function TetrisBoard(_canvas, boardSize) {
     }
 
     self.setField = function(pos, field) {
-        console.log("field: " + field);
+        // console.log("field: " + field);
         board[pos.y][pos.x].field = field;
         board[pos.y][pos.x].rect.set('fill', getColor(field));
     }
@@ -205,7 +205,7 @@ function TetrisBoard(_canvas, boardSize) {
     self.moveAboveRowsDown = function (row) {
         console.log("actually move the rows down for row: " + row);
 
-        for(var currentRow = row; currentRow > 1 ; --currentRow){
+        for(var currentRow = row; currentRow > 0 ; --currentRow){
             console.log("current row: " + currentRow);
             self.moveRowDown(currentRow);
         }

@@ -199,7 +199,7 @@ function TetrisContext(_board) {
     }
 
     self.rotateStone = function(position, stoneIdx, rotateRight) {
-        var newStoneIndex = rotatedStoneIndex(stoneIdx,rotateRight);
+        var newStoneIndex = rotatedStoneIndex(stoneIdx, rotateRight);
         self.removeStone(position, stoneIdx);
         self.placeStone(position, newStoneIndex)
         return newStoneIndex;

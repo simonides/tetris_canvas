@@ -133,6 +133,11 @@ function TetrisBoard(_canvas, boardSize) {
         return board[pos.y][pos.x].field;
     }
 
+    self.setFieldWithColor = function (pos, field, color) {
+        board[pos.y][pos.x].field = field;
+        board[pos.y][pos.x].rect.set('fill', color);
+    }
+
     self.setField = function(pos, field) {
         board[pos.y][pos.x].field = field;
         board[pos.y][pos.x].rect.set('fill', getColor(field));
@@ -146,7 +151,7 @@ function TetrisBoard(_canvas, boardSize) {
         for (var row = 0; row < boardSize.y; ++row ){
             if(self.checkRow(row)){
                 console.log("remove line: " + row);
-                self.deleteRow(row);
+                self.deleteRow(row, 150, true, this);
             }
         }
     }
@@ -163,11 +168,42 @@ function TetrisBoard(_canvas, boardSize) {
         return clearLine;
     }
 
-    self.deleteRow = function (row) {
-        //TODO
+    self.toggleRow = function (row, isFieldEmpty) {
+        var boardPos = {
+            'x': 0,
+            'y': row
+        };
+
+        var color = isFieldEmpty ? "#000" : "#090";
+
+        for (var x = 0; x < boardSize.x; ++x) {
+            boardPos.x = x;
+            self.setFieldWithColor(boardPos, 0, color);
+        }
+    }
+
+    self.deleteRow = function (row,timeToSleep, isFieldEmpty, _this ) {
+
+        _this.toggleRow(row, isFieldEmpty);
+        canvas.renderAll();
+
+        if(timeToSleep > 75) {
+            console.log("sleep for: " + timeToSleep);
+            setTimeout(function () {
+                    _this.deleteRow(row, (timeToSleep - 15), !isFieldEmpty, _this);
+            }, timeToSleep);
+        }else{
+            console.log("move all the stones one down");
+            _this.toggleRow(row, true);
+            canvas.renderAll();
+            _this.moveAboveRowsDown();
+        }
 
     }
 
+    self.moveAboveRowsDown = function (row) {
+        console.log("actually move the rows down");
+    }
 
     self.printBoard = function () {
         console.log("Board:");
@@ -193,4 +229,5 @@ function TetrisBoard(_canvas, boardSize) {
 
     construct();
 }
+
 

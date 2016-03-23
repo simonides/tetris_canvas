@@ -26,6 +26,8 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
     var currentStone;
     var stonePos;
 
+    var lastTimestamp = 0;
+
     function construct() {
         nextStoneType = gameContext.randomStone();
        
@@ -34,10 +36,11 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
             switch(e.which) {
                 case 37: left();  break;
-                //case 38: up();    break;
+
                 case 39: right(); break;
                 case 40: down();  break;
                 case 67: rotateLeft(); break;   // c
+                case 38:                        // up
                 case 86:
                 case 32: rotateRight(); break;  // v, space
                 default: return;
@@ -53,6 +56,18 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
         preview.update();
         board.update();
+    }
+
+
+    function scheduler(timestamp) {
+        var elapsedTime = timestamp - lastTimestamp;
+        lastTimestamp = timestamp;
+
+        requestAnimationFrame(scheduler);
+        if(elapsedTime > 100 || elapsedTime === 0 || isNaN(elapsedTime)) {
+            return;
+        }
+        gameLoop(elapsedTime);
     }
 
     function nextStone() {

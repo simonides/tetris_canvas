@@ -139,6 +139,7 @@ function TetrisBoard(_canvas, boardSize) {
     }
 
     self.setField = function(pos, field) {
+        console.log("field: " + field);
         board[pos.y][pos.x].field = field;
         board[pos.y][pos.x].rect.set('fill', getColor(field));
     }
@@ -182,7 +183,7 @@ function TetrisBoard(_canvas, boardSize) {
         }
     }
 
-    self.deleteRow = function (row,timeToSleep, isFieldEmpty, _this ) {
+    self.deleteRow = function (row, timeToSleep, isFieldEmpty, _this ) {
 
         _this.toggleRow(row, isFieldEmpty);
         canvas.renderAll();
@@ -196,22 +197,41 @@ function TetrisBoard(_canvas, boardSize) {
             console.log("move all the stones one down");
             _this.toggleRow(row, true);
             canvas.renderAll();
-            _this.moveAboveRowsDown();
+            _this.moveAboveRowsDown(row);
         }
 
     }
 
     self.moveAboveRowsDown = function (row) {
-        console.log("actually move the rows down");
+        console.log("actually move the rows down for row: " + row);
+
+        for(var currentRow = row; currentRow > 1 ; --currentRow){
+            console.log("current row: " + currentRow);
+            self.moveRowDown(currentRow);
+        }
+        canvas.renderAll();
+    }
+
+    //self.moveTopRowDown
+
+    self.moveRowDown = function(row){
+        var oldBoardPos = {'x': 0, 'y': row-1};
+        var newBoardPos = {'x': 0, 'y': row};
+
+        for (var x = 0; x < boardSize.x; ++x) {
+            var fieldType = board[row - 1][x].field;
+            oldBoardPos.x = x;
+            newBoardPos.x = x;
+
+            self.setField(oldBoardPos, ' ');
+            self.setField(newBoardPos, fieldType);
+        }
     }
 
     self.printBoard = function () {
         console.log("Board:");
         for(var y = 0; y < boardSize.y; ++y) {
-
-
             var line = y + ( y < 10 ? '  #' : ' #');
-
 
             for (var x = 0; x < boardSize.x; ++x) {
                 if(board[y][x].field == ' '){

@@ -83,10 +83,10 @@ function TetrisBoard(_canvas, boardSize) {
                 board[y][x] = {
                     field: defaultField,
                     rect: new fabric.Rect(
-                          { left:   x * fieldSize.x,
-                            top:    y * fieldSize.y,
-                            width:  fieldSize.x,
-                            height: fieldSize.y,
+                          { left:   x * fieldSize.x +2,
+                            top:    y * fieldSize.y +2,
+                            width:  fieldSize.x -4,
+                            height: fieldSize.y -4,
                             fill:   color
                         })
                 }
@@ -98,7 +98,7 @@ function TetrisBoard(_canvas, boardSize) {
     }
 
     function getColor(field) {
-        if(field == " ") {
+        if(field === " ") {
             return "#000";
         }
         switch(field % 7) {
@@ -171,7 +171,7 @@ function TetrisBoard(_canvas, boardSize) {
     function isRowFull(row) {
         var clearLine = true;
         for (var x = 0; x < boardSize.x; ++x) {
-            if (board[row][x].field == ' ') {
+            if (board[row][x].field === ' ') {
                 clearLine = false;
                 break;
             }
@@ -234,7 +234,7 @@ function TetrisBoard(_canvas, boardSize) {
             var line = y + ( y < 10 ? '  #' : ' #');
 
             for (var x = 0; x < boardSize.x; ++x) {
-                if(board[y][x].field == ' '){
+                if(board[y][x].field === ' '){
                     line += ' ';
                 }else{
                     line += 'X';

@@ -66,7 +66,7 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         preview.update();
         board.update();
 
-        scheduler();
+        timingHandler.setTimeout(gameSpeed, scheduler);
     }
 
 

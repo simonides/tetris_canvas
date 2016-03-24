@@ -155,12 +155,11 @@ function TetrisContext(_board) {
 
 
     self.randomStone = function() {
-        return 1;
         return Math.floor(Math.random() * stones.length);
     }
 
     function isStoneSolid(stoneIdx, x, y) {
-        return (stones[stoneIdx][y*4+x] != ' ');
+        return (stones[stoneIdx][y*4+x] !== ' ');
     }
 
     self.placeStone = function(position, stoneIdx) {
@@ -225,7 +224,7 @@ function TetrisContext(_board) {
                     if(!board.isValidPos(boardPos)){
                         return false;
                     }
-                    if(board.getField(boardPos) != ' ') {
+                    if(board.getField(boardPos) !== ' ') {
                         return false;
                     }
                 }

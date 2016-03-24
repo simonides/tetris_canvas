@@ -31,6 +31,7 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
     var timingHandler;
 
+    var allowUserInput = true;
 
     function construct() {
         nextStoneType = gameContext.randomStone();
@@ -41,8 +42,10 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
             if(e.which == 'r'){
                 gameFinished = false;
             }
+            if(!allowUserInput) {
+                return;
+            }
             if(gameFinished){
-                e.preventDefault();
                 return;
             }
             switch(e.which) {
@@ -111,8 +114,10 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
     function down() {
         var dir = {x: 0, y: 1};
         if(!gameContext.canMoveStone(stonePos, currentStone, dir)) {
+            allowUserInput = false;
             handleFullRows(function(){
                 nextStone();
+                allowUserInput = true;
             });
             return;
         }

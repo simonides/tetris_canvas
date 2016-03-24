@@ -148,17 +148,27 @@ function TetrisBoard(_canvas, boardSize) {
         canvas.renderAll();     //Note: internally, the library manages all changes. If there aren't many, it only makes partial redraws.
     }
 
-    self.checkBoardForRowsToDelete = function () {
+   /* self.checkBoardForRowsToDelete = function () {
         for (var row = 0; row < boardSize.y; ++row ){
             if(self.checkRow(row)){
                 console.log("remove line: " + row);
                 self.deleteRow(row, 150, true, this);
             }
         }
+    }*/
+
+    self.getRowsForDeletion = function () {
+        var fullRows = [];
+        for (var row = 0; row < boardSize.y; ++row ){
+            if(isRowFull(row)){
+                fullRows.push(row)
+            }
+        }
+        return fullRows;
     }
 
     // check if a row should be deleted
-    self.checkRow = function (row) {
+    function isRowFull(row) {
         var clearLine = true;
         for (var x = 0; x < boardSize.x; ++x) {
             if (board[row][x].field == ' ') {
@@ -169,52 +179,43 @@ function TetrisBoard(_canvas, boardSize) {
         return clearLine;
     }
 
-    self.toggleRow = function (row, isFieldEmpty) {
+    self.toggleRows = function (rows, colorTypeEmpty) {
+        for(var i=0; i<rows.length; ++i) {
+            toggleSingleRow(rows[i], colorTypeEmpty);
+        }
+    }
+
+    function toggleSingleRow(row, colorTypeEmpty) {
         var boardPos = {
             'x': 0,
             'y': row
         };
 
-        var color = isFieldEmpty ? "#000" : "#090";
-
+        var color = colorTypeEmpty ? "#000" : "#090";
         for (var x = 0; x < boardSize.x; ++x) {
             boardPos.x = x;
             self.setFieldWithColor(boardPos, 0, color);
         }
     }
 
-    self.deleteRow = function (row, timeToSleep, isFieldEmpty, _this ) {
-
-        _this.toggleRow(row, isFieldEmpty);
-        canvas.renderAll();
-
-        if(timeToSleep > 75) {
-            console.log("sleep for: " + timeToSleep);
-            setTimeout(function () {
-                    _this.deleteRow(row, (timeToSleep - 15), !isFieldEmpty, _this);
-            }, timeToSleep);
-        }else{
-            console.log("move all the stones one down");
-            _this.toggleRow(row, true);
-            canvas.renderAll();
-            _this.moveAboveRowsDown(row);
+    self.deleteRows = function (rows) {
+        // console.log("=== BEFORE ==============================================");
+        // self.printBoard();
+        rows.sort();
+        for(var i=0; i<rows.length; ++i) {
+            deleteSingleRow(rows[i]);
         }
-
+        // console.log("=== AFTER ==============================================");
+        // self.printBoard();
     }
 
-    self.moveAboveRowsDown = function (row) {
-        console.log("actually move the rows down for row: " + row);
-
+    function deleteSingleRow(row) {
         for(var currentRow = row; currentRow > 0 ; --currentRow){
-            console.log("current row: " + currentRow);
-            self.moveRowDown(currentRow);
+            moveRowDown(currentRow);
         }
-        canvas.renderAll();
     }
 
-    //self.moveTopRowDown
-
-    self.moveRowDown = function(row){
+    function moveRowDown(row){
         var oldBoardPos = {'x': 0, 'y': row-1};
         var newBoardPos = {'x': 0, 'y': row};
 
@@ -229,7 +230,6 @@ function TetrisBoard(_canvas, boardSize) {
     }
 
     self.printBoard = function () {
-        console.log("Board:");
         for(var y = 0; y < boardSize.y; ++y) {
             var line = y + ( y < 10 ? '  #' : ' #');
 

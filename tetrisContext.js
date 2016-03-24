@@ -155,8 +155,8 @@ function TetrisContext(_board) {
 
 
     self.randomStone = function() {
-       return Math.floor(Math.random() * stones.length);
-       // return 4;
+        return 1;
+        return Math.floor(Math.random() * stones.length);
     }
 
     function isStoneSolid(stoneIdx, x, y) {

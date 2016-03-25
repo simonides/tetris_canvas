@@ -1,17 +1,27 @@
 var gameSpeed = 1000;       // defines the time that is waited until the next tick happens
+var gameSpeedMax = gameSpeed;
+var gameSpeedMin = 250;
+var rowsToPassLevel = 10;
+var decreaseTimeout = 70;
 var gameFinished = false;
-var showEndScreen = false;
-var endscreen;
+var endscreen = null;
 var gameScore = 0;
 var restartBtn;
+var level = 0;
+
 
 $( document ).ready(function() {
     endscreen = $('#endScreen_div');
     restartBtn = $('#restartBtn');
     restartBtn.click(function () {
-        console.log("restart game from button");
+        //console.log("restart game from button");
         restartGame();
     });
+
+    endscreen.hide();
+
+
+
 });
 
 function init(){
@@ -52,8 +62,8 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
         $(document).keydown(function(e) {
 
-            if(e.which == 82){ // restart the game
-                console.log("restart the game..");
+            if(e.which == 82){ // button r restart the game
+                //console.log("restart the game..");
                 restartGame();
             }
             if(!allowUserInput) {
@@ -76,22 +86,23 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
             //board.printBoard();
             //board.checkBoardForRowsToDelete();
         });
-        console.log("consruct*******************************");
+        //console.log("consruct*******************************");
         previewContext.placeStone({x: 0, y: 0}, nextStoneType);
         nextStone();
 
         preview.update();
         board.update();
 
-        timingHandler.setTimeout(gameSpeed, scheduler);
-        toggleEndscreen();
+        timingHandler.setNewTimeout(gameSpeed);
+        timingHandler.setTimeout(scheduler);
         setScore(0);
+        setLevel();
     }
 
 
     function scheduler() {
-        console.log("tick");
-        timingHandler.setTimeout(gameSpeed, scheduler);
+        //console.log("tick");
+        timingHandler.setTimeout(scheduler);
         down();
     }
 
@@ -100,20 +111,21 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
     window.restartGame = function restartGame() {
         gameFinished = false;
-        showEndScreen = false;
         setScore(0);
+        setLevel();
 
         board.resetBoard();
         board.update();
 
-        timingHandler.setTimeout(gameSpeed, scheduler);
-        toggleEndscreen();
+        timingHandler.setNewTimeout(gameSpeed);
+        timingHandler.setTimeout(scheduler);
+        hideEndScreen();
 
     }
 
 
     function nextStone() {
-        console.log("Next stone!");
+        //console.log("Next stone!");
         previewContext.removeStone({x: 0, y: 0}, nextStoneType);
 
         currentStone = nextStoneType;
@@ -126,10 +138,10 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         if(!gameContext.canPlaceStone(stonePos, currentStone)) {
             gameContext.placeStone(stonePos, currentStone);
 
-            console.log("Game Over");
+            //console.log("Game Over");
             timingHandler.clearTimeout();
             gameFinished = true;
-            toggleEndscreen();
+            showEndscreen();
             return false;
         }
         gameContext.placeStone(stonePos, currentStone);
@@ -137,19 +149,23 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         return true;
     }
 
-    function toggleEndscreen() {
-        console.log("show end screen: " + showEndScreen);
-        if(showEndScreen){
-            endscreen.show();
-        }else{
-             endscreen.hide();
-        }
-        showEndScreen = !showEndScreen;
+    function showEndscreen() {
+        endscreen.show();
     }
+    function hideEndScreen() {
+        endscreen.hide();
+    }
+
 
     function setScore(score) {
         gameScore = score;
         $("#score").text("Score: "+ gameScore);
+    }
+
+    function setLevel() {
+
+        level = Math.floor((gameScore / rowsToPassLevel)) + 1;
+        $("#level").text("Level: "+ level);
     }
 
     function down() {
@@ -171,12 +187,14 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
     function handleFullRows(cb_func) {
         var fullRows = board.getRowsForDeletion();
-        console.log("Full rows: ", fullRows);
-
+        //console.log("Full rows: ", fullRows);
         setScore(gameScore + fullRows.length);
-
-        //TODO: calculate score and line count here; also increase speed depending on score
+        setLevel();
         if(fullRows.length == 0){
+            var speed = gameSpeed - (decreaseTimeout* (level-1));
+            speed = clamp(speed, gameSpeedMin, gameSpeedMax);
+            //console.log("speed: " + speed);
+            timingHandler.setNewTimeout(speed);
             cb_func();
             return;
         }
@@ -249,21 +267,22 @@ function TimingHandler() {
     "use strict";
     var self = this;
     var timeout = null;
-    var timeoutInMillis = 0;
+    var timeoutInMillis = 1000;
     var timeoutFunction = null;
 
-    self.setTimeout = function(_timeoutInMillis, _func) {
+    self.setTimeout = function(_func) {
         if(timeout !== null) {
             self.clearTimeout();
         }
-        timeoutInMillis = _timeoutInMillis;
         timeoutFunction = _func;
+        //console.log("timeout: " + timeoutInMillis);
         timeout = setTimeout(timeoutFunction, timeoutInMillis);
     }
 
-    self.increaseTimeoutOnce = function(_timeoutInMillis) {
+    self.setNewTimeout = function(_timeoutInMillis) {
+        timeoutInMillis = _timeoutInMillis;
         self.clearTimeout();
-        self.setTimeout(_timeoutInMillis, timeoutFunction);
+        self.setTimeout(timeoutFunction);
     }
 
     self.restartTimeout = function() {
@@ -271,7 +290,7 @@ function TimingHandler() {
             console.error("Unable to restart non-existing timeout");
         }
         self.clearTimeout();
-        self.setTimeout(timeoutInMillis, timeoutFunction);
+        self.setTimeout(timeoutFunction);
     }
 
     self.clearTimeout = function() {
@@ -280,6 +299,9 @@ function TimingHandler() {
     }
 }
 
+function clamp( val,  min,  max) {
+    return Math.max(min, Math.min(max, val));
+}
 
 // function Template(_canvas) {
 //     "use strict";

@@ -157,6 +157,20 @@ function TetrisBoard(_canvas, boardSize) {
         }
     }*/
 
+    self.resetBoard = function () {
+        var boardPos = {
+            'x': 0,
+            'y': 0
+        };
+        for(var row = 0 ; row < boardSize.y ; ++row){
+            boardPos.y = row;
+            for (var col = 0; col < boardSize.x; ++col){
+                boardPos.x = col;
+                self.setField( boardPos,' ');
+            }
+        }
+    }
+
     self.getRowsForDeletion = function () {
         var fullRows = [];
         for (var row = 0; row < boardSize.y; ++row ){

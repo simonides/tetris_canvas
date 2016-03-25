@@ -1,5 +1,18 @@
 var gameSpeed = 1000;       // defines the time that is waited until the next tick happens
 var gameFinished = false;
+var showEndScreen = false;
+var endscreen;
+var gameScore = 0;
+var restartBtn;
+
+$( document ).ready(function() {
+    endscreen = $('#endScreen_div');
+    restartBtn = $('#restartBtn');
+    restartBtn.click(function () {
+        console.log("restart game from button");
+        restartGame();
+    });
+});
 
 function init(){
     "use strict";
@@ -39,8 +52,9 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
         $(document).keydown(function(e) {
 
-            if(e.which == 'r'){
-                gameFinished = false;
+            if(e.which == 82){ // restart the game
+                console.log("restart the game..");
+                restartGame();
             }
             if(!allowUserInput) {
                 return;
@@ -70,6 +84,8 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         board.update();
 
         timingHandler.setTimeout(gameSpeed, scheduler);
+        toggleEndscreen();
+        setScore(0);
     }
 
 
@@ -82,7 +98,18 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
 
 
 
+    window.restartGame = function restartGame() {
+        gameFinished = false;
+        showEndScreen = false;
+        setScore(0);
 
+        board.resetBoard();
+        board.update();
+
+        timingHandler.setTimeout(gameSpeed, scheduler);
+        toggleEndscreen();
+
+    }
 
 
     function nextStone() {
@@ -102,6 +129,7 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
             console.log("Game Over");
             timingHandler.clearTimeout();
             gameFinished = true;
+            toggleEndscreen();
             return false;
         }
         gameContext.placeStone(stonePos, currentStone);
@@ -109,7 +137,20 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
         return true;
     }
 
+    function toggleEndscreen() {
+        console.log("show end screen: " + showEndScreen);
+        if(showEndScreen){
+            endscreen.show();
+        }else{
+             endscreen.hide();
+        }
+        showEndScreen = !showEndScreen;
+    }
 
+    function setScore(score) {
+        gameScore = score;
+        $("#score").text("Score: "+ gameScore);
+    }
 
     function down() {
         var dir = {x: 0, y: 1};
@@ -131,6 +172,9 @@ function Tetris(_board, _preview, _gameContext, _previewContext) {
     function handleFullRows(cb_func) {
         var fullRows = board.getRowsForDeletion();
         console.log("Full rows: ", fullRows);
+
+        setScore(gameScore + fullRows.length);
+
         //TODO: calculate score and line count here; also increase speed depending on score
         if(fullRows.length == 0){
             cb_func();

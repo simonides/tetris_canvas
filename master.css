@@ -1,12 +1,114 @@
+@font-face {
+    font-family: "pricedown";
+    src: url("pricedown_bl.ttf");
+}
+
 * {
     padding: 0;
     margin: 0;
     border: 0;
 }
 
+
 body{
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
+
+#controls{
+    //background-color: gold;
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
+
+#endScreen_div {
+    pointer-events: none;
+    z-index: 40;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 118, 255, 0.3);
+}
+
+
+#wasted{
+    text-align: center;
+    margin-top: 30%;
+
+    font-family: pricedown;
+    font-size: 100pt;
+    color: darkred;
+    text-shadow: 0 0 10px black;
+    -webkit-text-stroke: 5px #000;
+}
+#restartBtn{
+    position: absolute;
+    margin-left: 40%;
+    margin-top: 44%;
+    z-index: 55;
+}
+
+#score{
+    font-family: pricedown;
+    font-size: 25pt;
+}
+.myButton {
+    pointer-events: all;
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+    background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
+    background-color:#ffffff;
+    -moz-border-radius:9px;
+    -webkit-border-radius:9px;
+    border-radius:9px;
+    border:5px solid #dcdcdc;
+    display:inline-block;
+    cursor:pointer;
+    color:#666666;
+    font-family:Arial;
+    font-size:23px;
+    font-weight:bold;
+    padding:15px 41px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #ffffff;
+}
+.myButton:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+    background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
+    background-color:#f6f6f6;
+}
+.myButton:active {
+    position:relative;
+    top:1px;
+}
+
+.endscreen{
+    z-index: 51;
+    position: absolute;
+    top:-0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+
+
+
 
 #canvasWrapper {
     background-color: gray;

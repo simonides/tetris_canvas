@@ -12,9 +12,25 @@
 	<script type="text/javascript" src="./tetris.js"></script>
 </head>
 <body onload='init()'>
+	<div id="endScreen_div">
+		<p id="wasted" class="endscreen">Wasted!</p>
+		<a id="restartBtn" onclick="window.restartGame()" class="myButton">Start Over</a>
+	</div>
+ 	<div id="controls">
+		<p id="score">0</p>
+		<!--<p id="level">0</p>-->
+		<!--<p id="level1">0</p>-->
+		
+		<!--<button type="button">Click Me!</button>-->
+	</div>
+
 	<div id="canvasWrapper">
 	    <canvas id="canvas" width="1000px" height="2000px"></canvas>
 	</div>
 	<canvas id="previewCanvas" width="100px" height="100px"></canvas>
 </body>
 </html>
+
+
+
+
